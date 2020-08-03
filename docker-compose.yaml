@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  test:
+    build: .
+    working_dir: /test-dir
+    environment:
+        CREDENTIAL: /test-dir/mocking.json
+    volumes:
+      - ./:/test-dir
