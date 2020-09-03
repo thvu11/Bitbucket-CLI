@@ -14,12 +14,13 @@ class CmdIssue:
 
         issue = self.ua.get(endpoint)
 
-        print("title: {}\n".format(issue['title']))
-        print("summary:\n{}\n".format(issue['content']['raw']))
+        print("Title: {}".format(issue['title']))
+        print("ID: {}".format(issue['id']))
+        print("Assigned to {}".format(issue['assignee']))
+        print("Summary:\n\t{}".format(issue['content']['raw']))
         return 1
 
     def create(self, details={}):
-        #NOTE mock post data
         data = {
             "title": details['title'],
             "content": {
@@ -37,8 +38,8 @@ class CmdIssue:
 
         issue = self.ua.get(endpoint)
 
-        print("title: {}".format(issue['title']))
-        print("status: {}, type: {}, priority: {}".format(issue['state'], issue['kind'], issue['priority']))
+        print("Title: {}".format(issue['title']))
+        print("Status: {}, Type: {}, Priority: {}".format(issue['state'], issue['kind'], issue['priority']))
         return 1
 
     def close(self, issue_id, status="closed"):
@@ -57,6 +58,10 @@ class CmdIssue:
         issues = self.ua.get(self.issue_endpoint)
 
         for issue in issues['values']:
-            print("title: {}\n".format(issue['title']))
-            print("summary:\n{}\n".format(issue['content']['raw']))
+            if issue['state'] == 'closed':
+                continue
+            print("Title: {}".format(issue['title']))
+            print("ID: {}".format(issue['id']))
+            print("Assigned to {}".format(issue['assignee']))
+            print("Summary:\n\t{}\n".format(issue['content']['raw']))
         return 1

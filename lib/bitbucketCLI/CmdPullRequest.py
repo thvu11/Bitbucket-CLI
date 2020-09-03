@@ -14,8 +14,11 @@ class CmdPullRequest:
         endpoint = self.pull_request_endpoint + '/' + str(pr_id)
 
         pr = self.ua.get(endpoint)
-        print("title: {}\n".format(pr['title']))
-        print("summary:\n{}\n".format(pr['summary']['raw']))
+
+        print("Title: {}".format(pr['title']))
+        print("Author: {}".format(pr['author']['display_name']))
+        print("Merge: {} => {}".format(pr['source']['branch']['name'], pr['destination']['branch']['name']))
+        print("Summary:\n\t{}".format(pr['summary']['raw']))
         return 1
 
     def create(self, details={}):
@@ -47,7 +50,8 @@ class CmdPullRequest:
         }
 
         new_pr = self.ua.post(self.pull_request_endpoint, data)
-        print("Pull request (id={}) is created successfully\n".format(new_pr['id']))
+        print("Pull request (id={}) is created successfully".format(new_pr['id']))
+        print("Merge [{}] => [{}]".format(self.branch_dict['my_branch'], dest_branch))
 
         return 1
 
@@ -56,16 +60,19 @@ class CmdPullRequest:
         endpoint = self.pull_request_endpoint + '/' + str(pr_id)
 
         pr = self.ua.get(endpoint)
-        print("title: {}".format(pr['title']))
-        print("state: {}".format(pr['state']))
+        print("Title: {}".format(pr['title']))
+        print("State: {}".format(pr['state']))
 
         # get activity log for the pr
         activity_endpoint = self.pull_request_endpoint + '/' + str(pr_id) + '/activity'
 
         pr = self.ua.get(activity_endpoint)
+
         for activity in pr['values']:
             if activity['update']['changes']:
-                self.pp.pprint(activity['update']['changes'])
+                print("\n" + activity['update']['date'])
+                for element, edit_history in activity['update']['changes'].items():
+                    print("\t{}: {} => {}".format(element, edit_history['old'], edit_history['new']))
         return 1
 
     def close(self, pr_id, action="decline"):
@@ -79,6 +86,8 @@ class CmdPullRequest:
         pull_requests = self.ua.get(self.pull_request_endpoint)
 
         for pr in pull_requests['values']:
-            print("title: {}\n".format(pr['title']))
-            print("summary:\n{}\n".format(pr['summary']['raw']))
+            print("Title: {}".format(pr['title']))
+            print("Author: {}".format(pr['author']['display_name']))
+            print("Merge: {} => {}".format(pr['source']['branch']['name'], pr['destination']['branch']['name']))
+            print("Summary:\n\t{}\n".format(pr['summary']['raw']))
         return 1
