@@ -35,3 +35,7 @@ $ bb --help
 $ bb pr --help    # available sub-commands for pull request command
 $ bb issue --help # available sub-commands for issue command
 ```
+
+# Development
+Local development is done through a docker compose stack
+Feel free to setup the environment variable `BITBUCKET_CLI_CREDENTIAL` to your mock config file
