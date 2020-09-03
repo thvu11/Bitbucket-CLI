@@ -76,7 +76,9 @@ def pr(repo, action, id, title, content, branch):
     if action == 'create':
         if title is not None and content is not None:
             arg = { 'title': title, 'description': content }
-            arg['branch'] = branch if branch is not None
+
+            if branch is not None:
+                arg['branch'] = branch
         else:
             error("Title and description is required to create a pull request")
     elif action != 'list':
