@@ -5,7 +5,7 @@ Inspired by [Github CLI](https://github.com/cli/cli), Bitbucket-CLI attempts to 
 # Installation
 ## Using Pip
 ```bash
-  $ pip install bitbucket-cli
+  $ pip install thvu-bitbucket-cli
 ```
 ## Manual
 ```bash

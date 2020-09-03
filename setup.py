@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name="bitbucket-cli",
+    name="thvu-bitbucket-cli",
     version="1",
     py_modules=["repo"],
     packages=["lib", "lib.bitbucketCLI"],
