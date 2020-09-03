@@ -3,11 +3,13 @@ import os
 from .bitbucketCLI.CmdIssue import CmdIssue
 from .bitbucketCLI.CmdPullRequest import CmdPullRequest
 from .bitbucketCLI.Utils import error
+from .bitbucketCLI.Config import Config
 
 class Repo:
     def __init__(self, home=None, debug=False):
         self.home = os.path.abspath(home or '.')
         self.debug = debug
+        self.config = Config()
 
 pass_repo = click.make_pass_decorator(Repo)
 
@@ -31,7 +33,7 @@ def cli(ctx, repo_home, debug):
 @click.option('--content', required=False, help='Description for the new issue')
 @pass_repo
 def issue(repo, action, id, title, content):
-    issue_obj = CmdIssue()
+    issue_obj = CmdIssue(repo.config)
 
     arg = None
     if action == 'create':
@@ -65,14 +67,16 @@ def issue(repo, action, id, title, content):
 @click.option('--id', required=False, help='Target pull request ID')
 @click.option('--title', required=False, help='Title for the new pull request')
 @click.option('--content', required=False, help='Description for the new pull request')
+@click.option('--branch', required=False, help='Specify the branch the new pull request wants to merge into')
 @pass_repo
-def pr(repo, action, id, title, content):
-    pr_object = CmdPullRequest()
+def pr(repo, action, id, title, content, branch):
+    pr_object = CmdPullRequest(repo.config)
 
     arg = None
     if action == 'create':
         if title is not None and content is not None:
             arg = { 'title': title, 'description': content }
+            arg['branch'] = branch if branch is not None
         else:
             error("Title and description is required to create a pull request")
     elif action != 'list':

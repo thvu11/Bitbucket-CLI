@@ -5,6 +5,6 @@ services:
     build: .
     working_dir: /test-dir
     environment:
-        CREDENTIAL: /test-dir/mocking.json
+        BITBUCKET_CREDENTIAL: /test-dir/mocking.json
     volumes:
       - ./:/test-dir

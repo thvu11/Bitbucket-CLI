@@ -1,12 +1,10 @@
-from .Config import Config
 from .UserAgent import UserAgent
 
 import pprint
 
 class CmdIssue:
-    def __init__(self):
-        config = Config()
-        self.issue_endpoint = config.base_url + '/issues'
+    def __init__(self, config_obj):
+        self.issue_endpoint = config_obj.base_url + '/issues'
         self.pp = pprint.PrettyPrinter(indent=4)
         self.ua = UserAgent()
 

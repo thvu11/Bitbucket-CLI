@@ -1,14 +1,13 @@
-from .Config import Config
 from .UserAgent import UserAgent
 
 import pprint
 
 class CmdPullRequest:
-    def __init__(self):
-        config = Config()
-        self.pull_request_endpoint = config.base_url + '/pullrequests'
+    def __init__(self, config_obj):
+        self.pull_request_endpoint = config_obj.base_url + '/pullrequests'
         self.pp = pprint.PrettyPrinter(indent=4)
         self.ua = UserAgent()
+        self.branch_dict = config_obj.branch_dict
 
     def view(self, pr_id):
         # view the detail of a chosen pull request
@@ -22,16 +21,26 @@ class CmdPullRequest:
     def create(self, details={}):
         # create a PR using the current branch you're on
         #NOTE mock post data
+        dest_branch = 'master'
+        if 'branch' in details:
+            if details['branch'] in self.branch_dict['available_branch']:
+                dest_branch = details['branch']
+            else:
+                print("Unknown branch " + details['branch'])
+                return 0
+
+
         data = {
             "title": details['title'],
             "source": {
                 "branch": {
-                    "name": "update-readme"
+                    "name": self.branch_dict['my_branch']
+                    #"name": "update-readme"
                 }
             },
             "destination": {
                 "branch": {
-                    "name": "master"
+                    "name": dest_branch
                 }
             },
             "description": details['description']
